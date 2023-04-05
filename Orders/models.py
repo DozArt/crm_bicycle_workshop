@@ -9,7 +9,7 @@ class Services(models.Model):
 
 class Staff(models.Model):  # Работник
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    Rate = models.FloatField(default=0.5)
+    rate = models.FloatField(default=0.5)
 
 
 class Color(models.Model):
