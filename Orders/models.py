@@ -11,6 +11,9 @@ class Staff(models.Model):  # Работник
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     rate = models.FloatField(default=0.5)
 
+    def __str__(self):
+        return f'{self.user}'
+
 
 class Color(models.Model):
     name = models.CharField(max_length=64)
@@ -22,6 +25,9 @@ class Bike(models.Model):
     model = models.CharField(max_length=255)
     color = models.ForeignKey(Color, on_delete=models.CASCADE)
     frame_namber = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.model}'
 
 
 class Order(models.Model):  # Заказ
@@ -45,11 +51,14 @@ class Order(models.Model):  # Заказ
                               choices=STATUS,
                               default=diagnostics)
 
-    executor = models.ForeignKey(Staff, on_delete=models.CASCADE)  # Исполнитель
+    executor = models.ForeignKey(Staff, on_delete=models.CASCADE, verbose_name='Испольнитель')  # Исполнитель
     bike = models.ForeignKey(Bike, on_delete=models.CASCADE)
     comment = models.TextField(null=True, blank=True)
 
     services = models.ManyToManyField(Services, through='Operations')
+
+    def __str__(self):
+        return f'{self.bike.model}'
 
 
 class Operations(models.Model):  # ServicesOrder

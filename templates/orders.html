@@ -1,0 +1,45 @@
+{% extends 'flatpages/default.html' %}
+{% block title %}
+Orders
+{% endblock title %}
+
+{% block content %}
+<h1>Все заказы</h1>
+<table class="lead">
+    <tr>
+        <td>Поступление</td>
+        <td>Велосипед</td>
+        <td>Статус</td>
+        <td>Комментарий</td>
+        <td>Исполнитель</td>
+    </tr>
+{% for order in orders %}
+    <tr>
+        <td>{{ order.time_in|date:'d M Y'  }}</td>
+        <td>{{ order.bike.model }}</td>
+        <td>{{ order.status }}</td>
+        <td>{{ order.comment }}</td>
+        <td>{{ order.executor.user.username }}</td>
+    </tr>
+{% endfor %}
+</table>
+    {% if page_obj.has_previous %}
+        <a href="?page=1">1</a>
+        {% if page_obj.previous_page_number != 1 %}
+            ...
+            <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+        {% endif %}
+    {% endif %}
+
+    {# Информация о текущей странице #}
+    {{ page_obj.number }}
+
+    {# Информация о следующих страницах #}
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+        {% if paginator.num_pages != page_obj.next_page_number %}
+            ...
+            <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+        {% endif %}
+    {% endif %}
+{% endblock content %}
