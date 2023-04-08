@@ -4,25 +4,21 @@ Orders
 {% endblock title %}
 
 {% block content %}
-<h1>Заказы</h1>
-<a href="/orders/create/">Добавить</a>
+<h1>Велосипеды</h1>
+<a href="/bikes/create/">Добавить</a>
 <table class="lead">
     <tr>
-        <td>Поступление</td>
-        <td>Велосипед</td>
+        <td>Модель</td>
         <td>Цвет</td>
-        <td>Статус</td>
-        <td>Комментарий</td>
-        <td>Исполнитель</td>
+        <td>Вледелец</td>
+        <td>Номер рамы</td>
     </tr>
-{% for order in orders %}
+{% for bike in bikes %}
     <tr>
-        <td><a href="/orders/{{ order.id }}">{{ order.time_in|date:'d.m'  }}</a></td>
-        <td>{{ order.bike.model }}</td>
-        <td>{{ order.bike.color.name }}</td>
-        <td>{{ order.status }}</td>
-        <td>{{ order.comment }}</td>
-        <td>{{ order.executor.user.username }}</td>
+        <td>{{ bike.model }}</td>
+        <td>{{ bike.color.name }}</td>
+        <td>{{ bike.user.username }}</td>
+        <td>{{ bike.frame_namber }}</td>
     </tr>
 {% endfor %}
 </table>

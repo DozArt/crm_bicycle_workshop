@@ -1,10 +1,14 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 
 
 class Services(models.Model):
     name = models.CharField(max_length=255)
     price = models.FloatField(default=0.0)
+
+    def __str__(self):
+        return f'{self.name}'
 
 
 class Staff(models.Model):  # Работник
@@ -19,6 +23,9 @@ class Color(models.Model):
     name = models.CharField(max_length=64)
     hex_code = models.CharField(max_length=7)
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 class Bike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -27,7 +34,7 @@ class Bike(models.Model):
     frame_namber = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
-        return f'{self.model}'
+        return f'{self.model} - {self.color}'
 
 
 class Order(models.Model):  # Заказ
@@ -51,14 +58,17 @@ class Order(models.Model):  # Заказ
                               choices=STATUS,
                               default=diagnostics)
 
-    executor = models.ForeignKey(Staff, on_delete=models.CASCADE, verbose_name='Испольнитель')  # Исполнитель
-    bike = models.ForeignKey(Bike, on_delete=models.CASCADE)
+    executor = models.ForeignKey(Staff, on_delete=models.CASCADE, verbose_name='Испольнитель', null=True, blank=True)  # Исполнитель
+    bike = models.ForeignKey(Bike, on_delete=models.CASCADE, null=True, blank=True)
     comment = models.TextField(null=True, blank=True)
 
-    services = models.ManyToManyField(Services, through='Operations')
+    services = models.ManyToManyField(Services, through='Operations', verbose_name='Услуги')
 
     def __str__(self):
-        return f'{self.bike.model}'
+        return f'{self.bike} - {self.comment}'
+
+    def get_absolute_url(self):
+        return reverse('order_update', args=[str(self.id)])
 
 
 class Operations(models.Model):  # ServicesOrder
@@ -67,7 +77,7 @@ class Operations(models.Model):  # ServicesOrder
     amount = models.IntegerField(default=1)
 
 
-class Profile(models.Model):
+class Profile(models.Model):  # добавить телефон
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     telegram = models.CharField(max_length=255, null=True, blank=True)
     watsapp = models.CharField(max_length=255, null=True, blank=True)
